@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sephy.postman;
+package net.sephy.postman;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;

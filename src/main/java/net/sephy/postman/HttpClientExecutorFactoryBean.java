@@ -1,4 +1,4 @@
-package com.sephy.postman;
+package net.sephy.postman;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.fluent.Executor;

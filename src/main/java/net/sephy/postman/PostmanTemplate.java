@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sephy.postman;
+package net.sephy.postman;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -89,7 +89,7 @@ public class PostmanTemplate {
 	private <T> ResponseHandler<? extends T> getResponseHandler(Class<? extends T> klass) {
 		ResponseHandler responseHandler = handlerMap.get(klass);
 		if (responseHandler == null) {
-			responseHandler = new JsonResponseHandler(klass);
+			responseHandler = new JSONResponseHandler(klass);
 			handlerMap.put(klass, responseHandler);
 		}
 		return responseHandler;

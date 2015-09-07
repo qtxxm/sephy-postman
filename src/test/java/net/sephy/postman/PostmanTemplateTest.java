@@ -1,4 +1,4 @@
-package com.sephy.postman;
+package net.sephy.postman;
 
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.utils.HttpClientUtils;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sephy.postman;
+package net.sephy.postman;
 
 /**
  * @author Sephy

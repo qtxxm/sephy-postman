@@ -14,29 +14,28 @@
  * limitations under the License.
  */
 
-package com.sephy.postman;
+package net.sephy.postman;
 
-import java.io.IOException;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.impl.client.AbstractResponseHandler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 
 /**
  * @author Sephy
  * @since: 2015-08-07
  */
-public class JsonResponseHandler<T> extends AbstractResponseHandler<T> {
+public class JSONResponseHandler<T> extends AbstractResponseHandler<T> {
 
 	private Class<T> klass;
 
-	private static ObjectMapper objectMapper = new ObjectMapper();
+	private ObjectMapper objectMapper = new ObjectMapper();
 
-	public JsonResponseHandler() {
+	public JSONResponseHandler() {
 	}
 
-	public JsonResponseHandler(Class<T> klass) {
+	public JSONResponseHandler(Class<T> klass) {
 		this.klass = klass;
 	}
 
@@ -44,8 +43,8 @@ public class JsonResponseHandler<T> extends AbstractResponseHandler<T> {
 		this.klass = klass;
 	}
 
-	public static void setObjectMapper(ObjectMapper objectMapper) {
-		JsonResponseHandler.objectMapper = objectMapper;
+	public void setObjectMapper(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
 	}
 
 	@Override
