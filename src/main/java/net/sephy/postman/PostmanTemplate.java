@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class PostmanTemplate {
 
-	private ConcurrentMap<Class, ResponseHandler> handlerMap = new ConcurrentHashMap<>();
+	private ConcurrentMap<Class, ResponseHandler> handlerCache = new ConcurrentHashMap<>();
 
 	private Executor executor = Executor.newInstance();
 
@@ -51,29 +51,19 @@ public class PostmanTemplate {
 
 	public <T> T get(String url, Map<String, Object> params, Map<String, Object> headers,
 			ResponseHandler<T> responseHandler) {
-		try {
-            RequestBuilder builder = RequestBuilder.get(url);
-			PostmanUtils.setParameter(builder, params);
-            Request get = Request.Get(builder.build().getURI());
-            PostmanUtils.setHeader(get, headers);
-            Response response = executor.execute(get);
-			return response.handleResponse(responseHandler);
-		} catch (Exception ex) {
-			throw new PostmanException(ex);
-		}
+		RequestBuilder builder = RequestBuilder.get(url);
+		PostmanUtils.setParameter(builder, params);
+		Request request = Request.Get(builder.build().getURI());
+		PostmanUtils.setHeader(request, headers);
+		return execute(request, responseHandler);
 	}
 
 	public <T> T post(String url, Map<String, Object> params, Map<String, Object> headers,
 			ResponseHandler<T> responseHandler) {
-		try {
-			Request request = Request.Get(url);
-			PostmanUtils.setParameter(request, params);
-			PostmanUtils.setHeader(request, headers);
-			Response response = executor.execute(request);
-			return response.handleResponse(responseHandler);
-		} catch (Exception ex) {
-			throw new PostmanException(ex);
-		}
+		Request request = Request.Get(url);
+		PostmanUtils.setParameter(request, params);
+		PostmanUtils.setHeader(request, headers);
+		return execute(request, responseHandler);
 	}
 
 	public <T> T getJSON(String url, Map<String, Object> params, Map<String, Object> headers, Class<? extends T> klass) {
@@ -86,11 +76,20 @@ public class PostmanTemplate {
 		return post(url, params, headers, responseHandler);
 	}
 
+	private <T> T execute(Request request, ResponseHandler<T> responseHandler) {
+		try {
+			Response response = executor.execute(request);
+			return response.handleResponse(responseHandler);
+		} catch (Exception ex) {
+			throw new PostmanException(ex);
+		}
+	}
+
 	private <T> ResponseHandler<? extends T> getResponseHandler(Class<? extends T> klass) {
-		ResponseHandler responseHandler = handlerMap.get(klass);
+		ResponseHandler responseHandler = handlerCache.get(klass);
 		if (responseHandler == null) {
 			responseHandler = new JSONResponseHandler(klass);
-			handlerMap.put(klass, responseHandler);
+			handlerCache.put(klass, responseHandler);
 		}
 		return responseHandler;
 	}
