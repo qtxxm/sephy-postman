@@ -16,11 +16,14 @@
 
 package net.sephy.postman;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.impl.client.AbstractResponseHandler;
 
-import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.sephy.postman.util.ObjectMapperUtils;
 
 /**
  * @author Sephy
@@ -30,13 +33,15 @@ public class JSONResponseHandler<T> extends AbstractResponseHandler<T> {
 
 	private Class<T> klass;
 
-	private ObjectMapper objectMapper = new ObjectMapper();
+	private ObjectMapper objectMapper;
 
 	public JSONResponseHandler() {
+		objectMapper = ObjectMapperUtils.getDefaultObjectMapper();
 	}
 
-	public JSONResponseHandler(Class<T> klass) {
+	public JSONResponseHandler(Class<T> klass, ObjectMapper objectMapper) {
 		this.klass = klass;
+		this.objectMapper = objectMapper;
 	}
 
 	public void setKlass(Class<T> klass) {
